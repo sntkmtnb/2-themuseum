@@ -4,6 +4,7 @@
   --color-earth-brown: #573c28;
   --color-earth-cream: #E7DBB2;
   --color-earth-light: #f3f3f3;
+  --color-text-neutral: #f3f3f3;
 }
 
 @theme inline {
@@ -21,56 +22,20 @@ html {
 }
 
 body {
-  /* font-family: var(--font-noto-sans-jp) は @theme で --font-noto にマッピングされているので
-     font-noto クラスを使えばよいが、body全体に適用するためここで指定 */
   font-family: var(--font-noto-sans-jp), "Noto Sans JP", sans-serif;
   
   /* 背景画像を設定: Figmaのデザイン参考 */
-  background-color: var(--color-earth-cream);
-  background-image: url('/assets/hero.png');
+  background-color: #8B0000; /* 赤色フォールバック */
+  background-image: url('/assets/figma/hero_bg.png'); /* Figmaから取得した背景 */
   background-repeat: no-repeat;
-  background-size: cover; /* 画面いっぱいに隙間なく表示 */
+  background-size: cover; /* 全画面を覆う */
   background-position: center;
-  background-attachment: fixed; /* 背景を固定して奥行き感を出す */
+  background-attachment: fixed; /* 背景固定 */
+  color: var(--color-text-neutral);
   overflow-x: hidden;
 }
 
-/* ============================================
-   Typography
-   ============================================ */
-
-.title-main {
-  font-family: 'Arial Black', 'Helvetica Neue', sans-serif;
-  font-weight: 800;
-  font-size: clamp(40px, 12vw, 64px);
-  letter-spacing: 0.05em;
-  color: var(--color-earth-brown);
-  line-height: 1.1;
-}
-
-.title-sub {
-  font-weight: 700;
-  font-size: clamp(20px, 6.0vw, 32px);
-  letter-spacing: 1.2px;
-  color: var(--color-earth-brown);
-}
-
-.heading {
-  font-weight: 700;
-  font-size: clamp(18px, 5.5vw, 24px);
-  line-height: 1.6;
-  letter-spacing: 1.05px;
-  margin-bottom: 24px;
-}
-
-.body-text {
-  font-weight: 500;
-  font-size: clamp(15px, 4.5vw, 18px);
-  line-height: 1.8;
-  letter-spacing: 0.8px;
-}
-
-/* ドロップシャドウ設定 */
+/* Figma再現用ユーティリティ */
 .drop-shadow-glow {
   text-shadow: 
     2px 2px 0px rgba(231, 219, 178, 0.8),
@@ -78,18 +43,6 @@ body {
     2px -2px 0px rgba(231, 219, 178, 0.8),
     -2px 2px 0px rgba(231, 219, 178, 0.8);
 }
-
-.drop-shadow-lg {
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
-}
-
-.drop-shadow-md {
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-}
-
-/* ============================================
-   Fade-in Animation
-   ============================================ */
 
 .fade-in {
   opacity: 0;
@@ -100,16 +53,4 @@ body {
 .fade-in.visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-/* ============================================
-   Footer
-   ============================================ */
-
-.footer-text {
-  font-family: 'Arial Black', 'Helvetica Neue', sans-serif;
-  font-size: 13px;
-  font-weight: bold;
-  line-height: 6.0em;
-  color: var(--color-earth-brown);
 }

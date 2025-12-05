@@ -9,8 +9,8 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "The Dive - 根源への潜行",
-  description: "深く、もっと深く。地球の心臓の音を聞きにいく。",
+  title: "THE MUSEUM - 巨匠（5歳）、降臨。",
+  description: "ここは、世界で一番ハードルの低い美術館。教科書の権威を脱ぎ捨てて、直感と衝動だけで名画を描き直しました。",
 };
 
 export default function RootLayout({

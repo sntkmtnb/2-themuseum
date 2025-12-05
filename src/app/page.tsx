@@ -276,7 +276,7 @@ function Section({ id, paintImage, title1, title2, catchPhrase, body }: SectionP
       </div>
 
       {/* Light */}
-      <div className="absolute h-[50px] left-1/2 top-[23px] translate-x-[-50%] w-[35px] pointer-events-none">
+      <div className="absolute h-[55px] left-[calc(50%+4px)] top-[22px] translate-x-[-50%] w-[47px] pointer-events-none">
         <Image
           src={imgLight}
           alt=""

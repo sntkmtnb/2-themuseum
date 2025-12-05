@@ -12,6 +12,7 @@ const imgRay = "/assets/figma/ray.png";
 const imgLight = "/assets/figma/light.png";
 const imgHeroFrame = "/assets/figma/hero_frame.png";
 const imgHeroBgInner = "/assets/figma/hero_bg_inner.png";
+const imgHeroLogo = "/assets/figma/hero_logo.png";
 
 // Paint images for each section
 const paintImages = [
@@ -152,14 +153,14 @@ function HeroImage() {
             </div>
           </div>
         </div>
-        {/* Text - THE MUSEUM タイトル */}
-        <div className="h-[59px] overflow-clip relative shrink-0 w-[195px] flex flex-col items-center justify-center z-10">
-          <h1 className="text-[24px] font-black tracking-[0.12em] text-[#573c28] leading-none whitespace-nowrap" style={{ fontFamily: "'Arial Black', 'Helvetica Neue', sans-serif" }}>
-            THE MUSEUM
-          </h1>
-          <p className="text-[14px] font-bold text-[#573c28] mt-1 tracking-[0.05em]">
-            巨匠（5歳）、降臨。
-          </p>
+        {/* Logo - THE MUSEUM タイトル画像 */}
+        <div className="h-[56px] relative shrink-0 w-[184px] z-10">
+          <Image
+            src={imgHeroLogo}
+            alt="THE MUSEUM - 巨匠（5歳）、降臨。"
+            fill
+            className="object-contain"
+          />
         </div>
       </div>
 
@@ -188,6 +189,7 @@ function HeroImage() {
  * Figma: data-name="Section"
  */
 interface SectionProps {
+  id: string; // Add ID for observer
   paintImage: string;
   title1: string;
   title2: string;
@@ -195,11 +197,15 @@ interface SectionProps {
   body: string;
 }
 
-function Section({ paintImage, title1, title2, catchPhrase, body }: SectionProps) {
+function Section({ id, paintImage, title1, title2, catchPhrase, body }: SectionProps) {
   return (
-    <div className="box-border content-stretch flex flex-col items-center px-0 py-[24px] relative shrink-0 w-full fade-in">
+    <div
+      id={id}
+      className="section-container box-border content-stretch flex flex-col items-center px-0 py-[24px] relative shrink-0 w-full transition-all duration-700 ease-out"
+      data-active="false"
+    >
       {/* Frame */}
-      <div className="box-border content-stretch flex flex-col gap-[24px] items-center pb-[24px] pt-[128px] px-0 relative shrink-0 w-full">
+      <div className="frame-content box-border content-stretch flex flex-col gap-[24px] items-center pb-[24px] pt-[128px] px-0 relative shrink-0 w-full transition-all duration-700 ease-out filter brightness-[0.4]">
         {/* Paint */}
         <div className="box-border content-stretch flex flex-col gap-[24px] items-center px-0 py-[24px] relative shrink-0">
           {/* PaintImg */}
@@ -250,7 +256,7 @@ function Section({ paintImage, title1, title2, catchPhrase, body }: SectionProps
       </div>
 
       {/* Card */}
-      <div className="box-border content-stretch flex flex-col gap-[12px] items-center leading-[1.6] max-w-[375px] p-[24px] relative shrink-0 text-[#f3f3f3] w-full">
+      <div className="card-content box-border content-stretch flex flex-col gap-[12px] items-center leading-[1.6] max-w-[375px] p-[24px] relative shrink-0 text-[#f3f3f3] w-full transition-all duration-700 ease-out filter brightness-[0.4]">
         <p className="font-bold relative shrink-0 text-[20px] tracking-[1px] w-full">
           {catchPhrase}
         </p>
@@ -259,8 +265,8 @@ function Section({ paintImage, title1, title2, catchPhrase, body }: SectionProps
         </p>
       </div>
 
-      {/* Ray */}
-      <div className="absolute h-[367px] left-[81px] top-[55px] w-[213px] pointer-events-none">
+      {/* Ray - Updated layout: Centered */}
+      <div className="light-effect absolute h-[367px] left-1/2 top-[55px] translate-x-[-50%] w-[213px] pointer-events-none opacity-0 transition-opacity duration-700 ease-out">
         <Image
           src={imgRay}
           alt=""
@@ -270,7 +276,7 @@ function Section({ paintImage, title1, title2, catchPhrase, body }: SectionProps
       </div>
 
       {/* Light */}
-      <div className="absolute h-[50px] left-1/2 top-[23px] translate-x-[-50%] w-[35px] pointer-events-none">
+      <div className="light-effect absolute h-[50px] left-1/2 top-[23px] translate-x-[-50%] w-[35px] pointer-events-none opacity-0 transition-opacity duration-700 ease-out">
         <Image
           src={imgLight}
           alt=""
@@ -288,7 +294,7 @@ function Section({ paintImage, title1, title2, catchPhrase, body }: SectionProps
  */
 function Footer() {
   return (
-    <div className="box-border content-stretch flex flex-col gap-[128px] items-center overflow-clip pb-[64px] pt-[24px] px-0 relative shrink-0 w-full fade-in">
+    <div className="box-border content-stretch flex flex-col gap-[128px] items-center overflow-clip pb-[64px] pt-[24px] px-0 relative shrink-0 w-full">
       {/* Card */}
       <div className="box-border content-stretch flex flex-col gap-[12px] items-center max-w-[375px] p-[24px] relative shrink-0 text-[#f3f3f3] w-full">
         <p className="font-bold leading-[1.6] relative shrink-0 text-[20px] tracking-[1px] w-full">
@@ -323,18 +329,43 @@ export default function Home() {
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
+    // Observer for section activation (Light ON/OFF)
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          const target = entry.target as HTMLElement;
           if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
+            target.setAttribute("data-active", "true");
+            // Update child elements styles via DOM manipulation for better performance than React state
+            target.querySelectorAll(".frame-content, .card-content").forEach((el) => {
+              (el as HTMLElement).style.filter = "brightness(1)";
+            });
+            target.querySelectorAll(".light-effect").forEach((el) => {
+              (el as HTMLElement).style.opacity = "1";
+            });
+          } else {
+            // When scrolling away, reset to dark/off state?
+            // User requested: "スクロールで自身のセクションに到達するまでは、LightをOFFに"
+            // If we want it to turn OFF again when scrolling past, we keep this else block.
+            // If we want it to stay ON once visited, we remove it.
+            // Based on "スクロールに合わせて", likely wants dynamic toggling.
+            target.setAttribute("data-active", "false");
+            target.querySelectorAll(".frame-content, .card-content").forEach((el) => {
+              (el as HTMLElement).style.filter = "brightness(0.4)";
+            });
+            target.querySelectorAll(".light-effect").forEach((el) => {
+              (el as HTMLElement).style.opacity = "0";
+            });
           }
         });
       },
-      { rootMargin: "-10% 0px -10% 0px", threshold: 0 }
+      { 
+        rootMargin: "-20% 0px -20% 0px", // Trigger when element is in the middle 60% of screen
+        threshold: 0.4 
+      }
     );
 
-    document.querySelectorAll(".fade-in").forEach((el) => {
+    document.querySelectorAll(".section-container").forEach((el) => {
       observerRef.current?.observe(el);
     });
 
@@ -350,6 +381,7 @@ export default function Home() {
       {sectionsData.map((section, index) => (
         <Section
           key={index}
+          id={`section-${index}`}
           paintImage={paintImages[index]}
           title1={section.title1}
           title2={section.title2}
